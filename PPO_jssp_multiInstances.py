@@ -279,7 +279,7 @@ def main():
         if (i_update + 1) % 100 == 0:
             vali_result = - validate(vali_data, ppo.policy).mean()
             validation_log.append(vali_result)
-            if vali_result < record:
+            if vali_result < record:    #保存模型
                 torch.save(ppo.policy.state_dict(), './{}.pth'.format(
                     str(configs.n_j) + '_' + str(configs.n_m) + '_' + str(configs.low) + '_' + str(configs.high)))
                 record = vali_result

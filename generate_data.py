@@ -1,16 +1,16 @@
 import numpy as np
-from uniform_instance_gen import uni_instance_gen
+from uniform_instance_gen import uni_instance_gen,uni_instance_gen_res
 
-j = 6
-m = 6
+j = 30
+m = 8
 l = 1
-h = 99
-batch_size = 1
+h = 4
+batch_size = 100
 seed = 200
 def gen_random_data():
     np.random.seed(seed)
     # 先 jobs 再 machines
-    data = np.array([uni_instance_gen(n_j=j, n_m=m, low=l, high=h) for _ in range(batch_size)])
+    data = np.array([uni_instance_gen_res(n_j=j, n_m=m, low=l, high=h) for _ in range(batch_size)])
     print(data.shape)
     np.save('generatedData{}_{}_Seed{}.npy'.format(j, m, seed), data) 
     path = 'generatedData{}_{}_Seed{}.npy'.format(j, m, seed)
@@ -38,7 +38,7 @@ def gen_acc_data():
                     [1, 0, 0, 1, 1, 1]])
 
     # 修改加工时间矩阵
-    modified_times = np.where(mask == 1, data[0], np.inf)  # 使用np.inf表示不加工的机器
+    modified_times = np.where(mask == 1, data[0], 0)  # 使用np.inf表示不加工的机器
 
     # 更新加工顺序矩阵
     # 只保留需要加工的机器的索引
@@ -47,11 +47,15 @@ def gen_acc_data():
         order = data[1][i][mask[i] == 1]  # 只保留需要加工的机器的顺序
         modified_order.append(order)
 
-    modified_order = np.array(modified_order)
-    pass
+    modified_order = np.array(modified_order, dtype=object)
+    print("Modified Processing Times:\n", modified_times)
+    print("Modified Processing Order:\n", modified_order)
+    print(data)
+
 def look(path):
     test = np.load(path)
     print(test)
 if __name__ == '__main__':
     t = gen_random_data()
     look(t)
+    # gen_acc_data()

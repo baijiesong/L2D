@@ -9,11 +9,11 @@ import numpy as np
 
 device = torch.device(configs.device)
 
-parser = argparse.ArgumentParser(description='Arguments for ppo_jssp')
-parser.add_argument('--Pn_j', type=int, default=15, help='Number of jobs of instances to test')
-parser.add_argument('--Pn_m', type=int, default=15, help='Number of machines instances to test')
-parser.add_argument('--Nn_j', type=int, default=15, help='Number of jobs on which to be loaded net are trained')
-parser.add_argument('--Nn_m', type=int, default=15, help='Number of machines on which to be loaded net are trained')
+parser = argparse.ArgumentParser(description='Arguments for ppo_jssp') 
+parser.add_argument('--Pn_j', type=int, default=6, help='Number of jobs of instances to test')         ##都是15
+parser.add_argument('--Pn_m', type=int, default=6, help='Number of machines instances to test')
+parser.add_argument('--Nn_j', type=int, default=6, help='Number of jobs on which to be loaded net are trained')
+parser.add_argument('--Nn_m', type=int, default=6, help='Number of machines on which to be loaded net are trained')
 parser.add_argument('--low', type=int, default=1, help='LB of duration')
 parser.add_argument('--high', type=int, default=99, help='UB of duration')
 parser.add_argument('--seed', type=int, default=200, help='Seed for validate set generation')

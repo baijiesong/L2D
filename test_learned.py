@@ -6,7 +6,7 @@ from Params import configs
 import time
 import numpy as np
 
-
+# off policy
 device = torch.device(configs.device)
 
 parser = argparse.ArgumentParser(description='Arguments for ppo_jssp') 

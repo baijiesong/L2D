@@ -179,8 +179,104 @@ def revise():
     # Step 3: 保存更新后的数组到原文件或新文件
     np.save('G:\github_project\L2D\DataGen\generatedData30_8_Seed200.npy', data)
 
+
+def own_data():
+    base_data= np.array([[[3, 3, 0, 0, 0, 0, 0, 0],
+                      [0, 3, 3, 0, 0, 0, 0, 0],
+                      [3, 3, 0, 0, 0, 0, 0, 0],
+                      [0, 3, 0, 3, 0, 0, 1, 1],
+                      [0, 3, 0, 0, 3, 0, 1, 1],
+                      [0, 3, 0, 0, 0, 3, 1, 1],
+                      [3, 0, 3, 0, 0, 0, 0, 0],
+                      [3, 0, 0, 3, 0, 0, 1, 1],
+                      [3, 0, 0, 0, 3, 0, 1, 1],
+                      [3, 0, 0, 0, 0, 3, 1, 1],
+                      [3, 0, 3, 0, 0, 0, 0, 0],
+                      [0, 3, 3, 0, 0, 0, 0, 0],
+                      [0, 0, 3, 3, 0, 0, 1, 1],
+                      [0, 0, 3, 0, 3, 0, 1, 1],
+                      [0, 0, 3, 0, 0, 3, 1, 1],
+                      [0, 0, 0, 3, 3, 0, 0, 0],
+                      [0, 0, 0, 3, 0, 3, 0, 0],
+                      [3, 0, 0, 3, 0, 0, 1, 1],
+                      [0, 3, 0, 3, 0, 0, 1, 1],
+                      [0, 0, 3, 3, 0, 0, 1, 1],
+                      [0, 0, 0, 3, 3, 0, 0, 0],
+                      [0, 0, 0, 0, 3, 3, 0, 0],
+                      [3, 0, 0, 0, 3, 0, 1, 1],
+                      [0, 3, 0, 0, 3, 0, 1, 1],
+                      [0, 0, 3, 0, 3, 0, 1, 1],
+                      [0, 0, 0, 0, 3, 3, 0, 0],
+                      [0, 0, 0, 3, 0, 3, 0, 0],
+                      [3, 0, 0, 0, 0, 3, 1, 1],
+                      [0, 3, 0, 0, 0, 3, 1, 1],
+                      [0, 0, 3, 0, 0, 3, 1, 1]],
+                     [[1, 2, 3, 4, 5, 6, 7, 8],
+                      [1, 3, 2, 4, 5, 6, 7, 8],
+                      [1, 7, 8, 4, 2, 3, 5, 6],
+                      [1, 7, 8, 5, 2, 3, 4, 6],
+                      [1, 7, 8, 6, 2, 3, 4, 5],
+                      [2, 1, 3, 4, 5, 6, 7, 8],
+                      [2, 3, 1, 4, 5, 6, 7, 8],
+                      [2, 7, 8, 4, 1, 3, 5, 6],
+                      [2, 7, 8, 5, 1, 3, 4, 6],
+                      [2, 7, 8, 6, 1, 3, 4, 5],
+                      [3, 1, 2, 4, 5, 6, 7, 8],
+                      [3, 2, 1, 4, 5, 6, 7, 8],
+                      [3, 7, 8, 4, 1, 2, 5, 6],
+                      [3, 7, 8, 5, 1, 2, 4, 6],
+                      [3, 7, 8, 6, 1, 2, 4, 5],
+                      [4, 5, 1, 2, 3, 6, 7, 8],
+                      [4, 6, 1, 2, 3, 5, 7, 8],
+                      [4, 8, 7, 1, 2, 3, 5, 6],
+                      [4, 8, 7, 2, 1, 3, 5, 6],
+                      [4, 8, 7, 3, 1, 2, 5, 6],
+                      [5, 4, 1, 2, 3, 6, 7, 8],
+                      [5, 6, 1, 2, 3, 4, 7, 8],
+                      [5, 8, 7, 1, 2, 3, 4, 6],
+                      [5, 8, 7, 2, 1, 3, 4, 6],
+                      [5, 8, 7, 3, 1, 2, 4, 6],
+                      [6, 5, 1, 2, 3, 4, 7, 8],
+                      [6, 4, 1, 2, 3, 5, 7, 8],
+                      [6, 8, 7, 1, 2, 3, 4, 5],
+                      [6, 8, 7, 2, 1, 3, 4, 5],
+                      [6, 8, 7, 3, 1, 2, 4, 5]]]) 
+    # 生成100个样本
+    samples = []
+    samples.append(base_data)
+    for _ in range(99):
+        # 随机打乱第一个矩阵中的每一行内容
+        first_matrix_shuffled_rows = np.array([np.random.permutation(row) for row in base_data[0]])
+        # 随机打乱第一个矩阵的行顺序
+        first_matrix_shuffled = first_matrix_shuffled_rows[np.random.permutation(first_matrix_shuffled_rows.shape[0])]
+
+        # 随机打乱第二个矩阵中的每一行内容
+        second_matrix_shuffled_rows = np.array([np.random.permutation(row) for row in base_data[1]])
+        # 随机打乱第二个矩阵的行顺序
+        second_matrix_shuffled = second_matrix_shuffled_rows[np.random.permutation(second_matrix_shuffled_rows.shape[0])]
+
+        # 将生成的矩阵组合为一个样本
+        samples.append([first_matrix_shuffled, second_matrix_shuffled])
+    np.save('G:\github_project\L2D\DataGen\generatedData30_8_Seed200.npy', samples)
+    vali_samples=[]
+    for _ in range(100):
+        # 随机打乱第一个矩阵中的每一行内容
+        first_matrix_shuffled_rows = np.array([np.random.permutation(row) for row in base_data[0]])
+        # 随机打乱第一个矩阵的行顺序
+        first_matrix_shuffled = first_matrix_shuffled_rows[np.random.permutation(first_matrix_shuffled_rows.shape[0])]
+
+        # 随机打乱第二个矩阵中的每一行内容
+        second_matrix_shuffled_rows = np.array([np.random.permutation(row) for row in base_data[1]])
+        # 随机打乱第二个矩阵的行顺序
+        second_matrix_shuffled = second_matrix_shuffled_rows[np.random.permutation(second_matrix_shuffled_rows.shape[0])]
+
+        # 将生成的矩阵组合为一个样本
+        samples.append([first_matrix_shuffled, second_matrix_shuffled])
+    np.save('G:\github_project\L2D\DataGen\Vali\generatedData30_8_Seed200.npy', vali_samples)
+     
 if __name__ == '__main__':
     # t = gen_random_data()
-    # look('G:\github_project\L2D\DataGen\generatedData30_8_Seed200.npy')
     # gen_random_data()
-    revise()
+    # revise()
+    own_data()
+    look('G:\github_project\L2D\DataGen\generatedData30_8_Seed200.npy')

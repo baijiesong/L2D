@@ -56,8 +56,8 @@ g_pool_step = g_pool_cal(graph_pool_type=configs.graph_pool_type,
 from uniform_instance_gen import uni_instance_gen
 np.random.seed(SEED)
 
-dataLoaded = np.load('./DataGen/generatedData' + str(N_JOBS_P) + '_' + str(N_MACHINES_P) + '_Seed' + str(SEED) + '.npy')
-# dataLoaded = np.load('G:\github_project\L2D\generatedData_acc_Seed.npy')
+# dataLoaded = np.load('./DataGen/generatedData' + str(N_JOBS_P) + '_' + str(N_MACHINES_P) + '_Seed' + str(SEED) + '.npy')
+dataLoaded = np.load('G:\github_project\L2D\generatedData30_8_Seed200_modified.npy')
 dataset = []
 
 for i in range(dataLoaded.shape[0]):

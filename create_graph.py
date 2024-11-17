@@ -1,6 +1,13 @@
 import networkx as nx
 import random
 import numpy as np
+node=12
+l_edges=4
+h_edges=8
+l_weight=1
+h_weight=10
+batch_size = 100
+seed = 200
 # 初始化边记录字典
 edge_records = {}
 
@@ -11,17 +18,17 @@ edge_id = 1
 G = nx.Graph()
 
 # 添加n个节点
-G.add_nodes_from(range(12))
+G.add_nodes_from(range(node))
 
 # 随机连接节点，添加带权重的边
 for node in G.nodes():
-    num_edges = random.randint(4, 8)  # 每个节点连接4到8条边
+    num_edges = random.randint(l_edges, h_edges)  # 每个节点连接4到8条边
     neighbors = random.sample([n for n in G.nodes() if n != node], num_edges)
     
     for neighbor in neighbors:
         if not G.has_edge(node, neighbor):  # 确保不会重复添加边
             # 为每条边设置一个随机权重
-            weight = random.randint(1, 10)  # 权重范围是1到10
+            weight = random.randint(l_weight, h_weight)  # 权重范围是1到10
             G.add_edge(node, neighbor, weight=weight)
             
             # 记录边编号和信息
@@ -139,6 +146,7 @@ for job, record in path_records.items():
 # 打印结果
 print("\n第一个矩阵（加工时间矩阵）：")
 print(processing_time_matrix)
-
 print("\n第二个矩阵（路径顺序矩阵）：")
 print(path_order_matrix)
+print(processing_time_matrix.shape)
+print(path_order_matrix.shape)

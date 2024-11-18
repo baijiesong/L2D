@@ -8,6 +8,7 @@ l_weight=1
 h_weight=10
 batch_size = 100
 seed = 200
+total_edges=56
 # 初始化边记录字典
 edge_records = {}
 
@@ -20,29 +21,24 @@ G = nx.Graph()
 # 添加n个节点
 G.add_nodes_from(range(node))
 
-# 随机连接节点，添加带权重的边
-for node in G.nodes():
-    num_edges = random.randint(l_edges, h_edges)  # 每个节点连接4到8条边
-    neighbors = random.sample([n for n in G.nodes() if n != node], num_edges)
+ # 随机连接节点，添加带权重的边
+for n in G.nodes():
+    num_edges = random.randint(l_edges, h_edges)
+    neighbors = random.sample([i for i in G.nodes() if i != n], num_edges)
     
     for neighbor in neighbors:
-        if not G.has_edge(node, neighbor):  # 确保不会重复添加边
-            # 为每条边设置一个随机权重
-            weight = random.randint(l_weight, h_weight)  # 权重范围是1到10
-            G.add_edge(node, neighbor, weight=weight)
+        if not G.has_edge(n, neighbor):  # 确保不会重复添加边
+            weight = random.randint(l_weight, h_weight)
+            G.add_edge(n, neighbor, weight=weight)
             
-            # 记录边编号和信息
             edge_records[edge_id] = {
-                'source': node,
+                'source': n,
                 'destination': neighbor,
                 'weight': weight
             }
-            
-            # 打印边的编号和信息
-            print(f"边编号 {edge_id}: {node} -> {neighbor}, 权重: {weight}")
-            
-            # 更新边编号
             edge_id += 1
+            if G.number_of_edges() == total_edges:  # 如果达到总边数，停止添加边
+                break
 
 # 打印所有边的记录
 print("\n所有边记录：")
@@ -69,50 +65,88 @@ labels = nx.get_edge_attributes(G, 'weight')
 nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
 plt.show()
 
-
 # 构造路径记录
 path_records = {}
-# 寻找每个 job 的最短路径
-for job in range(12):
-    source = job
-    destination = (job + 1) % 12  # 目的节点是下一个节点，最后一个节点指向第一个节点
-    
-    try:
-        # 使用 Dijkstra 算法计算最短路径和最短路径长度
-        shortest_path = nx.shortest_path(G, source=source, target=destination, weight='weight')
-        shortest_path_length = nx.shortest_path_length(G, source=source, target=destination, weight='weight')
-        print(f"Job {source} -> Job {destination}: 最短路径为 {shortest_path}，总权重为 {shortest_path_length}")
-        # 找到路径中涉及的边编号
-        shortest_path_edges = [
-            eid for i in range(len(shortest_path) - 1)
-            for eid, record in edge_records.items()
-            if {record['source'], record['destination']} == {shortest_path[i], shortest_path[i+1]}
-        ]
-        
-        path_records[job] = {
-            'source': source,
-            'destination': destination,
-            'path': shortest_path,
-            'length': shortest_path_length,
-            'edges': shortest_path_edges
-        }
-    except nx.NetworkXNoPath:
-        # 如果没有路径连接
-        path_records[job] = {
-            'source': source,
-            'destination': destination,
-            'path': None,
-            'length': float('inf'),
-            'edges': []
-        }
-        print(f"Job {source} -> Job {destination}: False")
-# 打印路径记录
-print("\n路径记录：")
-for job, record in path_records.items():
-    print(f"Job {record['source']} -> {record['destination']}: 路径 {record['path']}, 权重 {record['length']}, 涉及边编号 {record['edges']}")
-# 获取路径总数
-num_paths = len(edge_records)
+job_id = 0  # 用于唯一标识每个 job
+for source in range(node):
+    for destination in range(node):
+        if source != destination:  # 确保源和目标不同
+            try:
+                # 使用 Dijkstra 算法计算最短路径和最短路径长度
+                shortest_path = nx.shortest_path(G, source=source, target=destination, weight='weight')
+                shortest_path_length = nx.shortest_path_length(G, source=source, target=destination, weight='weight')
+
+                # 找到路径中涉及的边编号
+                shortest_path_edges = [
+                    eid for i in range(len(shortest_path) - 1)
+                    for eid, record in edge_records.items()
+                    if {record['source'], record['destination']} == {shortest_path[i], shortest_path[i+1]}
+                ]
+
+                path_records[job_id] = {
+                    'source': source,
+                    'destination': destination,
+                    'path': shortest_path,
+                    'length': shortest_path_length,
+                    'edges': shortest_path_edges
+                }
+            except nx.NetworkXNoPath:
+                path_records[job_id] = {
+                    'source': source,
+                    'destination': destination,
+                    'path': None,
+                    'length': float('inf'),
+                    'edges': []
+                }
+
+            job_id += 1  # 更新 job_id
+
+# 获取路径总数和作业数
 num_jobs = len(path_records)
+num_paths = len(edge_records)
+# # 构造路径记录
+# path_records = {}
+# # 寻找每个 job 的最短路径
+# for job in range(12):
+#     source = job
+#     destination = (job + 1) % 12  # 目的节点是下一个节点，最后一个节点指向第一个节点
+    
+#     try:
+#         # 使用 Dijkstra 算法计算最短路径和最短路径长度
+#         shortest_path = nx.shortest_path(G, source=source, target=destination, weight='weight')
+#         shortest_path_length = nx.shortest_path_length(G, source=source, target=destination, weight='weight')
+#         print(f"Job {source} -> Job {destination}: 最短路径为 {shortest_path}，总权重为 {shortest_path_length}")
+#         # 找到路径中涉及的边编号
+#         shortest_path_edges = [
+#             eid for i in range(len(shortest_path) - 1)
+#             for eid, record in edge_records.items()
+#             if {record['source'], record['destination']} == {shortest_path[i], shortest_path[i+1]}
+#         ]
+        
+#         path_records[job] = {
+#             'source': source,
+#             'destination': destination,
+#             'path': shortest_path,
+#             'length': shortest_path_length,
+#             'edges': shortest_path_edges
+#         }
+#     except nx.NetworkXNoPath:
+#         # 如果没有路径连接
+#         path_records[job] = {
+#             'source': source,
+#             'destination': destination,
+#             'path': None,
+#             'length': float('inf'),
+#             'edges': []
+#         }
+#         print(f"Job {source} -> Job {destination}: False")
+# # 打印路径记录
+# print("\n路径记录：")
+# for job, record in path_records.items():
+#     print(f"Job {record['source']} -> {record['destination']}: 路径 {record['path']}, 权重 {record['length']}, 涉及边编号 {record['edges']}")
+# # 获取路径总数
+# num_paths = len(edge_records)
+# num_jobs = len(path_records)
 
 # 初始化两个矩阵
 processing_time_matrix = np.zeros((num_jobs, num_paths), dtype=int)  # 第一矩阵
